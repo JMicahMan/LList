@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "nodeType.h"
+#include "LlistIterator.h"
 
 
 template <typename T>
@@ -15,63 +16,31 @@ protected:
 	nodeType <T> *last;
 
 public:
-	const linkedListType <T>& operator = (const linkedListType<T>& other)
-	{
-		copyList(other);
-		return *this;
-	}
+	const linkedListType<T>& operator = (const linkedListType<T>& other);
 
-	void initializeList()
-	{
+	void initializeList();
 
-		first = nullptr;
-		last = nullptr;
-		count = 0;
-	}
-	bool isEmptyList() const
-	{
+	bool isEmptyList() const;
 
-		if (count == 0)
-			return true;
-		else
-			return false;
-	}
-	void print() const
-	{
-		nodeType <T> *current = first;
+	void print() const;
 
-		while (current != nullptr)
-		{
-			std::cout << current->info << std::endl;
-			current->nextLink;
-		}
-		//std::cout << last << std::endl;
-	}
+	int length() const;
+	
+	virtual bool search(const T&)const = 0;
+	virtual void insertFirst(const T&) = 0;
+	virtual void insertLast(const T&) = 0;
+	virtual void deleteNode(const T&) = 0;
 
-	int length() const
-	{
+	void destroyList();
+	
+	T front() const;
 
-	}
-
-	void destroyList()
-	{
-
-	}
-
-	T front() const
-	{
-
-	}
-
-	T back() const
-	{
-
-	}
+	T back() const;
 
 
-	linkedListIterator <T> begin();
+	linkedListIterator<T> begin();
 
-	linkedListIterator <T> end();
+	linkedListIterator<T> end();
 
 	linkedListType();
 
@@ -86,60 +55,83 @@ private:
 };
 
 template<typename T>
-const linkedListType<T>& linkedListType<T>::operator=(const linkedListType<T>&)
+const linkedListType<T>& linkedListType<T>::operator=(const linkedListType<T>& other)
 {
-
+	copyList(other);
+	return *this;
 }
 
 template<typename T>
 void linkedListType<T>::initializeList()
 {
+	first = nullptr;
+	last = nullptr;
+	count = 0;
 }
+
 
 template<typename T>
 bool linkedListType<T>::isEmptyList() const
 {
-	return false;
+
+	if (count == 0)
+		return true;
+	else
+		return false;
 }
 
 template<typename T>
 void linkedListType<T>::print() const
 {
+	nodeType <T> *current = first;
+	while (current != last->nextLink)
+	{
+		std::cout << current->info << std::endl;
+		current = current->nextLink;
+	}
 }
 
 template<typename T>
 int linkedListType<T>::length() const
 {
-	return 0;
+	return count;
 }
+
 
 template<typename T>
 void linkedListType<T>::destroyList()
 {
+	if (isEmptyList() == false)
+	{
+		for (int i = 0; i<count; i++)
+		{
+			deleteNode(first->info);
+		}
+	}
 }
 
 template<typename T>
 T linkedListType<T>::front() const
 {
-	return T();
+	return first->info;
 }
 
 template<typename T>
 T linkedListType<T>::back() const
 {
-	return T();
+	return last->info;
 }
 
 template<typename T>
 linkedListIterator<T> linkedListType<T>::begin()
 {
-	return linkedListIterator<T>();
+	return linkedListIterator<T>(first);
 }
 
 template<typename T>
 linkedListIterator<T> linkedListType<T>::end()
 {
-	return linkedListIterator<T>();
+	return linkedListIterator<T>(last);
 }
 
 template<typename T>
@@ -149,8 +141,10 @@ linkedListType<T>::linkedListType()
 }
 
 template<typename T>
-linkedListType<T>::linkedListType(const linkedListIterator<T>&)
+linkedListType<T>::linkedListType(const linkedListIterator<T>& other)
 {
+	initializeList();
+	copyList(other);
 }
 
 template<typename T>
@@ -158,9 +152,9 @@ void linkedListType<T>::copyList(const linkedListType<T>& other)
 {
 	destroyList();
 	nodeType <T> *temp = other.first;
-	while (temp != nullptr)
+	while (temp != other.last->nextLink)
 	{
-		insterLast(temp->info);
-
+		insertLast(temp->info);
+		temp = temp->nextLink;
 	}
 }

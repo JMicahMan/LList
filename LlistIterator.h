@@ -18,7 +18,7 @@ public:
 
 	bool operator==(const linkedListIterator<T>&) const;
 
-	bool operator!=(const linkedListIrerator<T>&) const;
+	bool operator!=(const linkedListIterator<T>&) const;
 
 };
 
@@ -54,7 +54,7 @@ bool linkedListIterator<T>::operator==(const linkedListIterator<T>& other) const
 }
 
 template<typename T>
-bool linkedListIterator<T>::operator!=(const linkedListIrerator<T>& other) const
+bool linkedListIterator<T>::operator!=(const linkedListIterator<T>& other) const
 {
 	return this->current != other.current;
 
